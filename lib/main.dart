@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'src/modules/game_module/game_binding.dart';
@@ -8,10 +7,10 @@ import 'src/routes/app_pages.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeRight,
-    DeviceOrientation.landscapeLeft,
-  ]);
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.landscapeRight,
+  //   DeviceOrientation.landscapeLeft,
+  // ]);
   runApp(MyApp());
 }
 

@@ -1,11 +1,14 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
+part of 'widgets.dart';
 
 class WidgetCard extends StatefulWidget {
-  final String text;
+  final GameCard card;
+  final Function(GameCard) onTap;
 
-  const WidgetCard({Key? key, required this.text}) : super(key: key);
+  const WidgetCard({
+    Key? key,
+    required this.card,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   _WidgetCardState createState() => _WidgetCardState();
@@ -16,30 +19,53 @@ class _WidgetCardState extends State<WidgetCard>
   bool _showFrontSide = true;
   bool _animationCompleted = true;
 
-  late AnimationController _scaleController;
-  late Animation<double> _scaleAnimation;
+  static const double cardHeight = 220;
 
   @override
   void initState() {
-    _scaleController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-    );
-    _scaleAnimation = Tween<double>(begin: 1, end: 1.1).animate(
-      CurvedAnimation(parent: _scaleController, curve: Curves.elasticIn),
-    );
-
     super.initState();
+  }
+
+  Widget _buildFront() {
+    return SvgPicture.asset(
+      'assets/images/back.svg',
+      key: const ValueKey(true),
+      height: cardHeight,
+    );
+  }
+
+  Widget _buildRear() {
+    var assets = '';
+    switch (widget.card) {
+      case GameCard.spadeAce:
+        assets = 'assets/images/front 1.svg';
+        break;
+      case GameCard.heartAce:
+        assets = 'assets/images/front 5.svg';
+        break;
+      case GameCard.diamondAce:
+        assets = 'assets/images/front 3.svg';
+        break;
+      case GameCard.clubAce:
+        assets = 'assets/images/front 4.svg';
+        break;
+      case GameCard.redKing:
+        assets = 'assets/images/front 2.svg';
+        break;
+    }
+    return SvgPicture.asset(
+      assets,
+      key: const ValueKey(false),
+      height: cardHeight,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        widget.onTap(widget.card);
         if (_animationCompleted) {
-          _showFrontSide
-              ? _scaleController.forward()
-              : _scaleController.reverse();
           setState(() {
             _showFrontSide = !_showFrontSide;
           });
@@ -48,6 +74,8 @@ class _WidgetCardState extends State<WidgetCard>
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 600),
         layoutBuilder: (widget, list) => Stack(children: [widget!, ...list]),
+        switchInCurve: Curves.easeOut,
+        switchOutCurve: Curves.easeOut.flipped,
         transitionBuilder: (widget, animation) {
           animation.addListener(() {
             _animationCompleted = animation.isCompleted;
@@ -65,39 +93,14 @@ class _WidgetCardState extends State<WidgetCard>
                 transform: (Matrix4.rotationY(value.toDouble())
                   ..setEntry(3, 0, tilt)),
                 alignment: Alignment.center,
-                child: Transform.scale(
-                  scale: _scaleAnimation.value,
-                  child: widget,
-                ),
+                child: widget,
               );
             },
             child: widget,
           );
         },
-        switchInCurve: Curves.easeOut,
-        switchOutCurve: Curves.easeOut.flipped,
         child: _showFrontSide ? _buildFront() : _buildRear(),
       ),
-    );
-  }
-
-  Widget _buildFront() {
-    return Container(
-      key: const ValueKey(true),
-      height: 180,
-      width: 120,
-      color: Colors.green,
-      child: Center(child: Text('front ${widget.text}')),
-    );
-  }
-
-  Widget _buildRear() {
-    return Container(
-      key: const ValueKey(false),
-      height: 180,
-      width: 120,
-      color: Colors.grey,
-      child: const Text('rear'),
     );
   }
 }
