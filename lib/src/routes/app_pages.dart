@@ -11,7 +11,7 @@ abstract class AppPages {
   static final pages = [
     GetPage(
       name: AppRoutes.game,
-      page: () => const GamePage(),
+      page: () => GamePage(),
       binding: GameBinding(),
     )
   ];

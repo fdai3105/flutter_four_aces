@@ -1,4 +1,3 @@
-import 'package:flutter_four_aces/src/modules/game_module/widgets/widgets.dart';
 import 'package:get/get.dart';
 
 enum GameCard {
@@ -7,10 +6,12 @@ enum GameCard {
   diamondAce,
   clubAce,
   redKing,
+  none,
 }
 
 class GameController extends GetxController {
-  final _cardSelect = GameCard.redKing.obs;
+  final _cardSelect = GameCard.none.obs;
+  final _select = GameCard.none.obs;
 
   GameCard get cardSelect => _cardSelect.value;
 
@@ -18,44 +19,28 @@ class GameController extends GetxController {
     _cardSelect.value = value;
   }
 
-  late List cards;
+  GameCard get select => _select.value;
 
-  @override
-  void onInit() {
-    cards = [
-      WidgetCard(
-        card: GameCard.spadeAce,
-        onTap: (card) {
-          cardSelect = card;
-        },
-      ),
-      WidgetCard(
-        card: GameCard.heartAce,
-        onTap: (card) {
-          cardSelect = card;
-        },
-      ),
-      WidgetCard(
-        card: GameCard.diamondAce,
-        onTap: (card) {
-          cardSelect = card;
-        },
-      ),
-      WidgetCard(
-        card: GameCard.clubAce,
-        onTap: (card) {
-          cardSelect = card;
-        },
-      ),
-    ]..shuffle();
-    super.onInit();
+  set select(GameCard value) {
+    _select.value = value;
   }
 
-  void onCardSelect(GameCard card) {
-    cardSelect = card;
+  Future onCardSelect(GameCard card) async {
+    if (cardSelect == GameCard.none) {
+      Get.rawSnackbar(title: 'Please select', message: 'chon kia`');
+      return;
+    }
+    select = card;
+    await Future.delayed(const Duration(milliseconds: 400));
+    if (card == cardSelect) {
+      Get.rawSnackbar(title: 'Win', message: 'win nha');
+    } else {
+      Get.rawSnackbar(title: 'Lose', message: 'lose nha');
+    }
   }
 
   void go() {
-    cards.shuffle();
+    select = GameCard.none;
+    cardSelect = GameCard.none;
   }
 }

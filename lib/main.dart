@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       getPages: AppPages.pages,
       initialBinding: GameBinding(),
-      home: const GamePage(),
+      home: GamePage(),
     );
   }
 }
