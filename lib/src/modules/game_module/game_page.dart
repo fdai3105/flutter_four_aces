@@ -16,85 +16,135 @@ class GamePage extends GetView<GameController> {
       body: SafeArea(
         child: GetX<GameController>(
           builder: (_) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            return Stack(
               children: [
-                Wrap(
-                  spacing: 20,
-                  runSpacing: 20,
-                  verticalDirection: VerticalDirection.up,
-                  children: [
-                    WidgetCard(
-                      cardType: GameCard.spadeAce,
-                      isSelect: controller.select == GameCard.spadeAce,
-                      onTap: (card) {
-                        controller.onCardSelect(card);
-                      },
-                    ),
-                    WidgetCard(
-                      cardType: GameCard.heartAce,
-                      isSelect: controller.select == GameCard.heartAce,
-                      onTap: (card) {
-                        controller.onCardSelect(card);
-                      },
-                    ),
-                    WidgetCard(
-                      cardType: GameCard.diamondAce,
-                      isSelect: controller.select == GameCard.diamondAce,
-                      onTap: (card) {
-                        controller.onCardSelect(card);
-                      },
-                    ),
-                    WidgetCard(
-                      cardType: GameCard.clubAce,
-                      isSelect: controller.select == GameCard.clubAce,
-                      onTap: (card) {
-                        controller.onCardSelect(card);
-                      },
-                    ),
-                  ],
-                ),
-                Row(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    WidgetButton(
-                      onTap: () {
-                        controller.cardSelect = GameCard.spadeAce;
-                      },
-                      isSelect: controller.cardSelect == GameCard.spadeAce,
-                      assets: 'assets/images/button1.svg',
+                    const SizedBox(height: 20),
+                    Wrap(
+                      spacing: 20,
+                      runSpacing: 20,
+                      children: [
+                        WidgetCard(
+                          cardType: GameCard.spadeAce,
+                          isSelect:
+                              controller.select.contains(GameCard.spadeAce),
+                          onTap: (card) {
+                            controller.onCardSelect(card);
+                          },
+                        ),
+                        WidgetCard(
+                          cardType: GameCard.heartAce,
+                          isSelect:
+                              controller.select.contains(GameCard.heartAce),
+                          onTap: (card) {
+                            controller.onCardSelect(card);
+                          },
+                        ),
+                        WidgetCard(
+                          cardType: GameCard.diamondAce,
+                          isSelect:
+                              controller.select.contains(GameCard.diamondAce),
+                          onTap: (card) {
+                            controller.onCardSelect(card);
+                          },
+                        ),
+                        WidgetCard(
+                          cardType: GameCard.clubAce,
+                          isSelect:
+                              controller.select.contains(GameCard.clubAce),
+                          onTap: (card) {
+                            controller.onCardSelect(card);
+                          },
+                        ),
+                      ],
                     ),
-                    WidgetButton(
-                      onTap: () {
-                        controller.cardSelect = GameCard.heartAce;
-                      },
-                      isSelect: controller.cardSelect == GameCard.heartAce,
-                      assets: 'assets/images/button2.svg',
+                    Text(
+                      'Point: ${controller.point}',
+                      style: const TextStyle(
+                        color: Color.fromRGBO(180, 146, 74, 1),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    WidgetButton(
-                      onTap: () => controller.go(),
-                      isSelect: false,
-                      assets: 'assets/images/buttonGO.svg',
-                    ),
-                    WidgetButton(
-                      onTap: () {
-                        controller.cardSelect = GameCard.diamondAce;
-                      },
-                      isSelect: controller.cardSelect == GameCard.diamondAce,
-                      assets: 'assets/images/button3.svg',
-                    ),
-                    WidgetButton(
-                      onTap: () {
-                        controller.cardSelect = GameCard.clubAce;
-                      },
-                      isSelect: controller.cardSelect == GameCard.clubAce,
-                      assets: 'assets/images/button4.svg',
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        WidgetButton(
+                          onTap: () {
+                            controller.cardSelect = GameCard.spadeAce;
+                          },
+                          isSelect: controller.cardSelect == GameCard.spadeAce,
+                          assets: 'assets/images/button1.svg',
+                        ),
+                        WidgetButton(
+                          onTap: () {
+                            controller.cardSelect = GameCard.heartAce;
+                          },
+                          isSelect: controller.cardSelect == GameCard.heartAce,
+                          assets: 'assets/images/button2.svg',
+                        ),
+                        WidgetButton(
+                          onTap: () => controller.go(),
+                          isSelect: false,
+                          assets: 'assets/images/buttonGO.svg',
+                        ),
+                        WidgetButton(
+                          onTap: () {
+                            controller.cardSelect = GameCard.diamondAce;
+                          },
+                          isSelect:
+                              controller.cardSelect == GameCard.diamondAce,
+                          assets: 'assets/images/button3.svg',
+                        ),
+                        WidgetButton(
+                          onTap: () {
+                            controller.cardSelect = GameCard.clubAce;
+                          },
+                          isSelect: controller.cardSelect == GameCard.clubAce,
+                          assets: 'assets/images/button4.svg',
+                        ),
+                      ],
                     ),
                   ],
                 ),
+                _buildLabel(),
               ],
             );
           },
+        ),
+      ),
+    );
+  }
+
+  AnimatedPositioned _buildLabel() {
+    return AnimatedPositioned(
+      top: controller.showLabel ? 0 : -100,
+      left: 0,
+      right: 0,
+      height: 80,
+      duration: const Duration(milliseconds: 800),
+      child: AnimatedOpacity(
+        opacity: controller.showLabel ? 1 : 0,
+        duration: const Duration(milliseconds: 500),
+        child: Container(
+          margin: const EdgeInsets.all(10),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/label.png'),
+            ),
+          ),
+          child: Center(
+            child: Text(
+              controller.labelMessage,
+              style: const TextStyle(
+                color: Colors.black87,
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
         ),
       ),
     );
