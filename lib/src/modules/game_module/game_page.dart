@@ -21,91 +21,111 @@ class GamePage extends GetView<GameController> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const SizedBox(height: 20),
-                    Wrap(
-                      spacing: 20,
-                      runSpacing: 20,
-                      children: [
-                        WidgetCard(
-                          cardType: GameCard.spadeAce,
-                          isSelect:
-                              controller.select.contains(GameCard.spadeAce),
-                          onTap: (card) {
-                            controller.onCardSelect(card);
-                          },
+                    Flexible(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 20,
                         ),
-                        WidgetCard(
-                          cardType: GameCard.heartAce,
-                          isSelect:
-                              controller.select.contains(GameCard.heartAce),
-                          onTap: (card) {
-                            controller.onCardSelect(card);
-                          },
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            AnimatedAlign(
+                              duration: const Duration(milliseconds: 120),
+                              alignment: controller.cardsPosition[0],
+                              child: WidgetCard(
+                                cardType: GameCard.spadeAce,
+                                isSelect: controller.select
+                                    .contains(GameCard.spadeAce),
+                                onTap: (card) {
+                                  controller.onCardSelect(card);
+                                },
+                              ),
+                            ),
+                            AnimatedAlign(
+                              duration: const Duration(milliseconds: 120),
+                              alignment: controller.cardsPosition[1],
+                              child: WidgetCard(
+                                cardType: GameCard.heartAce,
+                                isSelect: controller.select
+                                    .contains(GameCard.heartAce),
+                                onTap: (card) {
+                                  controller.onCardSelect(card);
+                                },
+                              ),
+                            ),
+                            AnimatedAlign(
+                              duration: const Duration(milliseconds: 120),
+                              alignment: controller.cardsPosition[2],
+                              child: WidgetCard(
+                                cardType: GameCard.diamondAce,
+                                isSelect: controller.select
+                                    .contains(GameCard.diamondAce),
+                                onTap: (card) {
+                                  controller.onCardSelect(card);
+                                },
+                              ),
+                            ),
+                            AnimatedAlign(
+                              duration: const Duration(milliseconds: 120),
+                              alignment: controller.cardsPosition[3],
+                              child: WidgetCard(
+                                cardType: GameCard.clubAce,
+                                isSelect: controller.select
+                                    .contains(GameCard.clubAce),
+                                onTap: (card) {
+                                  controller.onCardSelect(card);
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                        WidgetCard(
-                          cardType: GameCard.diamondAce,
-                          isSelect:
-                              controller.select.contains(GameCard.diamondAce),
-                          onTap: (card) {
-                            controller.onCardSelect(card);
-                          },
-                        ),
-                        WidgetCard(
-                          cardType: GameCard.clubAce,
-                          isSelect:
-                              controller.select.contains(GameCard.clubAce),
-                          onTap: (card) {
-                            controller.onCardSelect(card);
-                          },
-                        ),
-                      ],
-                    ),
-                    Text(
-                      'Point: ${controller.point}',
-                      style: const TextStyle(
-                        color: Color.fromRGBO(180, 146, 74, 1),
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        WidgetButton(
-                          onTap: () {
-                            controller.cardSelect = GameCard.spadeAce;
-                          },
-                          isSelect: controller.cardSelect == GameCard.spadeAce,
-                          assets: 'assets/images/button1.svg',
-                        ),
-                        WidgetButton(
-                          onTap: () {
-                            controller.cardSelect = GameCard.heartAce;
-                          },
-                          isSelect: controller.cardSelect == GameCard.heartAce,
-                          assets: 'assets/images/button2.svg',
-                        ),
-                        WidgetButton(
-                          onTap: () => controller.go(),
-                          isSelect: false,
-                          assets: 'assets/images/buttonGO.svg',
-                        ),
-                        WidgetButton(
-                          onTap: () {
-                            controller.cardSelect = GameCard.diamondAce;
-                          },
-                          isSelect:
-                              controller.cardSelect == GameCard.diamondAce,
-                          assets: 'assets/images/button3.svg',
-                        ),
-                        WidgetButton(
-                          onTap: () {
-                            controller.cardSelect = GameCard.clubAce;
-                          },
-                          isSelect: controller.cardSelect == GameCard.clubAce,
-                          assets: 'assets/images/button4.svg',
-                        ),
-                      ],
+                    Flexible(
+                      flex: 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          WidgetButton(
+                            onTap: () {
+                              controller.cardSelect = GameCard.spadeAce;
+                            },
+                            isSelect:
+                                controller.cardSelect == GameCard.spadeAce,
+                            assets: 'assets/images/button1.svg',
+                          ),
+                          WidgetButton(
+                            onTap: () {
+                              controller.cardSelect = GameCard.heartAce;
+                            },
+                            isSelect:
+                                controller.cardSelect == GameCard.heartAce,
+                            assets: 'assets/images/button2.svg',
+                          ),
+                          WidgetButton(
+                            onTap: () => controller.go(),
+                            isSelect: false,
+                            assets: 'assets/images/buttonGO.svg',
+                          ),
+                          WidgetButton(
+                            onTap: () {
+                              controller.cardSelect = GameCard.diamondAce;
+                            },
+                            isSelect:
+                                controller.cardSelect == GameCard.diamondAce,
+                            assets: 'assets/images/button3.svg',
+                          ),
+                          WidgetButton(
+                            onTap: () {
+                              controller.cardSelect = GameCard.clubAce;
+                            },
+                            isSelect: controller.cardSelect == GameCard.clubAce,
+                            assets: 'assets/images/button4.svg',
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

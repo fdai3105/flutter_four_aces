@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 enum GameCard {
@@ -12,11 +13,17 @@ enum GameCard {
 class GameController extends GetxController {
   final _cardSelect = GameCard.none.obs;
   final _select = <GameCard>[].obs;
-  final _point = 1000.obs;
   final _showLabel = false.obs;
   final _labelMessage = ''.obs;
 
   GameCard get cardSelect => _cardSelect.value;
+
+  final cardsPosition = [
+    Alignment.topLeft,
+    Alignment.topRight,
+    Alignment.bottomLeft,
+    Alignment.bottomRight,
+  ].obs;
 
   set cardSelect(GameCard value) {
     _cardSelect.value = value;
@@ -26,12 +33,6 @@ class GameController extends GetxController {
 
   set select(List<GameCard> value) {
     _select.value = value;
-  }
-
-  int get point => _point.value;
-
-  set point(int value) {
-    _point.value = value;
   }
 
   bool get showLabel => _showLabel.value;
@@ -47,10 +48,6 @@ class GameController extends GetxController {
   }
 
   Future onCardSelect(GameCard card) async {
-    if (point == 0) {
-      Get.rawSnackbar(title: 'Please cúng thêm tiền', message: '');
-      return;
-    }
     if (cardSelect == GameCard.none) {
       // Get.dia
       Get.rawSnackbar(title: 'Please select', message: 'chon kia`');
@@ -66,10 +63,8 @@ class GameController extends GetxController {
       GameCard.redKing,
     ];
     if (card == cardSelect) {
-      point += 50;
       labelMessage = 'WIN';
     } else {
-      point -= 50;
       labelMessage = 'LOSE';
     }
     showLabel = true;
@@ -77,9 +72,14 @@ class GameController extends GetxController {
     go();
   }
 
-  void go() {
+  void go() async {
     select = [];
     cardSelect = GameCard.none;
     showLabel = false;
+    await Future.delayed(const Duration(milliseconds: 1000));
+    for (var i = 0; i <= 20; i++) {
+      await Future.delayed(const Duration(milliseconds: 130));
+      cardsPosition.shuffle();
+    }
   }
 }
