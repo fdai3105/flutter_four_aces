@@ -15,6 +15,7 @@ class GameController extends GetxController {
   final _select = <GameCard>[].obs;
   final _showLabel = false.obs;
   final _labelMessage = ''.obs;
+  bool _isAnimation = false;
 
   GameCard get cardSelect => _cardSelect.value;
 
@@ -26,6 +27,7 @@ class GameController extends GetxController {
   ].obs;
 
   set cardSelect(GameCard value) {
+    if (_isAnimation) return;
     _cardSelect.value = value;
   }
 
@@ -48,8 +50,8 @@ class GameController extends GetxController {
   }
 
   Future onCardSelect(GameCard card) async {
+    if (_isAnimation) return;
     if (cardSelect == GameCard.none) {
-      // Get.dia
       Get.rawSnackbar(title: 'Please select', message: 'chon kia`');
       return;
     }
@@ -68,18 +70,20 @@ class GameController extends GetxController {
       labelMessage = 'LOSE';
     }
     showLabel = true;
-    await Future.delayed(const Duration(milliseconds: 2000));
-    go();
+    await reset();
   }
 
-  void go() async {
-    select = [];
+  Future reset() async {
+    await Future.delayed(const Duration(milliseconds: 2000));
     cardSelect = GameCard.none;
+    _isAnimation = true;
+    select = [];
     showLabel = false;
     await Future.delayed(const Duration(milliseconds: 1000));
-    for (var i = 0; i <= 20; i++) {
-      await Future.delayed(const Duration(milliseconds: 130));
+    for (var i = 0; i <= 50; i++) {
+      await Future.delayed(const Duration(milliseconds: 10));
       cardsPosition.shuffle();
     }
+    _isAnimation = false;
   }
 }
