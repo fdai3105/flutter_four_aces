@@ -52,7 +52,7 @@ class GameController extends GetxController {
   Future onCardSelect(GameCard card) async {
     if (_isAnimation) return;
     if (cardSelect == GameCard.none) {
-      Get.rawSnackbar(title: 'Please select', message: 'chon kia`');
+      Get.rawSnackbar(message: 'Chọn bài kìa');
       return;
     }
     select = [card];

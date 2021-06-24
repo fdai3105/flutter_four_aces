@@ -101,50 +101,6 @@ class GamePage extends GetView<GameController> {
     );
   }
 
-  Widget _buildBar() {
-    return Flexible(
-      flex: 1,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          WidgetButton(
-            onTap: () {
-              controller.cardSelect = GameCard.clubAce;
-            },
-            isSelect: controller.cardSelect == GameCard.clubAce,
-            assets: 'assets/images/button1.svg',
-          ),
-          WidgetButton(
-            onTap: () {
-              controller.cardSelect = GameCard.heartAce;
-            },
-            isSelect: controller.cardSelect == GameCard.heartAce,
-            assets: 'assets/images/button2.svg',
-          ),
-          WidgetButton(
-            onTap: () => {} /*controller.reset()*/,
-            isSelect: false,
-            assets: 'assets/images/buttonGO.svg',
-          ),
-          WidgetButton(
-            onTap: () {
-              controller.cardSelect = GameCard.diamondAce;
-            },
-            isSelect: controller.cardSelect == GameCard.diamondAce,
-            assets: 'assets/images/button3.svg',
-          ),
-          WidgetButton(
-            onTap: () {
-              controller.cardSelect = GameCard.spadeAce;
-            },
-            isSelect: controller.cardSelect == GameCard.spadeAce,
-            assets: 'assets/images/button4.svg',
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildLabel() {
     return AnimatedPositioned(
       top: controller.showLabel ? 0 : -100,
@@ -176,6 +132,50 @@ class GamePage extends GetView<GameController> {
       ),
     );
   }
+
+  Widget _buildBar() {
+    return Flexible(
+      flex: 1,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          WidgetButton(
+            onTap: () {
+              controller.cardSelect = GameCard.spadeAce;
+            },
+            isSelect: controller.cardSelect == GameCard.spadeAce,
+            assets: 'assets/images/button1.svg',
+          ),
+          WidgetButton(
+            onTap: () {
+              controller.cardSelect = GameCard.heartAce;
+            },
+            isSelect: controller.cardSelect == GameCard.heartAce,
+            assets: 'assets/images/button2.svg',
+          ),
+          // WidgetButton(
+          //   onTap: () => {} /*controller.reset()*/,
+          //   isSelect: false,
+          //   assets: 'assets/images/buttonGO.svg',
+          // ),
+          WidgetButton(
+            onTap: () {
+              controller.cardSelect = GameCard.diamondAce;
+            },
+            isSelect: controller.cardSelect == GameCard.diamondAce,
+            assets: 'assets/images/button3.svg',
+          ),
+          WidgetButton(
+            onTap: () {
+              controller.cardSelect = GameCard.clubAce;
+            },
+            isSelect: controller.cardSelect == GameCard.clubAce,
+            assets: 'assets/images/button4.svg',
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class WidgetButton extends StatelessWidget {
@@ -197,12 +197,16 @@ class WidgetButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           border: isSelect
-              ? Border.all(color: Colors.yellow)
-              : Border.all(color: Colors.transparent),
-          borderRadius: BorderRadius.circular(5),
+              ? Border.all(
+                  color: const Color.fromRGBO(180, 146, 74, 1),
+                  width: 2,
+                )
+              : Border.all(color: Colors.transparent, width: 2),
+          borderRadius: BorderRadius.circular(8),
         ),
         child: SvgPicture.asset(
           assets,
+          height: 60,
         ),
       ),
     );
