@@ -74,7 +74,7 @@ class GameController extends GetxController {
   }
 
   Future reset() async {
-    await Future.delayed(const Duration(milliseconds: 2000));
+    await Future.delayed(const Duration(seconds: 3));
     cardSelect = GameCard.none;
     _isAnimation = true;
     select = [];

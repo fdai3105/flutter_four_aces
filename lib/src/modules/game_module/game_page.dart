@@ -9,7 +9,7 @@ import 'widgets/widgets.dart';
 class GamePage extends GetView<GameController> {
   const GamePage({Key? key}) : super(key: key);
 
-  static const int _shuffleDuration = 100;
+  static const int _shuffleDuration = 140;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +101,7 @@ class GamePage extends GetView<GameController> {
     );
   }
 
-  Flexible _buildBar() {
+  Widget _buildBar() {
     return Flexible(
       flex: 1,
       child: Row(
@@ -122,7 +122,7 @@ class GamePage extends GetView<GameController> {
             assets: 'assets/images/button2.svg',
           ),
           WidgetButton(
-            onTap: () => controller.reset(),
+            onTap: () => {} /*controller.reset()*/,
             isSelect: false,
             assets: 'assets/images/buttonGO.svg',
           ),
@@ -145,7 +145,7 @@ class GamePage extends GetView<GameController> {
     );
   }
 
-  AnimatedPositioned _buildLabel() {
+  Widget _buildLabel() {
     return AnimatedPositioned(
       top: controller.showLabel ? 0 : -100,
       left: 0,
