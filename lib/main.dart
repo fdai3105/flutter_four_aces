@@ -6,11 +6,6 @@ import 'src/modules/game_module/game_page.dart';
 import 'src/routes/app_pages.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  // SystemChrome.setPreferredOrientations([
-  //   DeviceOrientation.landscapeRight,
-  //   DeviceOrientation.landscapeLeft,
-  // ]);
   runApp(MyApp());
 }
 

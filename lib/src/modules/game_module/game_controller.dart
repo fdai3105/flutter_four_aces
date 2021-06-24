@@ -56,6 +56,7 @@ class GameController extends GetxController {
       return;
     }
     select = [card];
+    print('Select: $cardSelect, result: ${select.first}');
     await Future.delayed(const Duration(milliseconds: 600));
     select = [
       GameCard.spadeAce,

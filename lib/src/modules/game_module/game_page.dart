@@ -109,9 +109,9 @@ class GamePage extends GetView<GameController> {
         children: [
           WidgetButton(
             onTap: () {
-              controller.cardSelect = GameCard.spadeAce;
+              controller.cardSelect = GameCard.clubAce;
             },
-            isSelect: controller.cardSelect == GameCard.spadeAce,
+            isSelect: controller.cardSelect == GameCard.clubAce,
             assets: 'assets/images/button1.svg',
           ),
           WidgetButton(
@@ -135,9 +135,9 @@ class GamePage extends GetView<GameController> {
           ),
           WidgetButton(
             onTap: () {
-              controller.cardSelect = GameCard.clubAce;
+              controller.cardSelect = GameCard.spadeAce;
             },
-            isSelect: controller.cardSelect == GameCard.clubAce,
+            isSelect: controller.cardSelect == GameCard.spadeAce,
             assets: 'assets/images/button4.svg',
           ),
         ],
