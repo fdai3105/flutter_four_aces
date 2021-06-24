@@ -140,36 +140,23 @@ class GamePage extends GetView<GameController> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           WidgetButton(
-            onTap: () {
-              controller.cardSelect = GameCard.spadeAce;
-            },
-            isSelect: controller.cardSelect == GameCard.spadeAce,
+            onTap: () => controller.onChoice(GameCard.spadeAce),
+            isSelect: controller.cardSelect.contains(GameCard.spadeAce),
             assets: 'assets/images/button1.svg',
           ),
           WidgetButton(
-            onTap: () {
-              controller.cardSelect = GameCard.heartAce;
-            },
-            isSelect: controller.cardSelect == GameCard.heartAce,
+            onTap: () => controller.onChoice(GameCard.heartAce),
+            isSelect: controller.cardSelect.contains(GameCard.heartAce),
             assets: 'assets/images/button2.svg',
           ),
-          // WidgetButton(
-          //   onTap: () => {} /*controller.reset()*/,
-          //   isSelect: false,
-          //   assets: 'assets/images/buttonGO.svg',
-          // ),
           WidgetButton(
-            onTap: () {
-              controller.cardSelect = GameCard.diamondAce;
-            },
-            isSelect: controller.cardSelect == GameCard.diamondAce,
+            onTap: () => controller.onChoice(GameCard.diamondAce),
+            isSelect: controller.cardSelect.contains(GameCard.diamondAce),
             assets: 'assets/images/button3.svg',
           ),
           WidgetButton(
-            onTap: () {
-              controller.cardSelect = GameCard.clubAce;
-            },
-            isSelect: controller.cardSelect == GameCard.clubAce,
+            onTap: () => controller.onChoice(GameCard.clubAce),
+            isSelect: controller.cardSelect.contains(GameCard.clubAce),
             assets: 'assets/images/button4.svg',
           ),
         ],

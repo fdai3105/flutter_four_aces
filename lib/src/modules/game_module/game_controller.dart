@@ -11,14 +11,12 @@ enum GameCard {
 }
 
 class GameController extends GetxController {
-  final _cardSelect = GameCard.none.obs;
+  // final _cardSelect = GameCard.none.obs;
+  final _cardSelect = <GameCard>[].obs;
   final _select = <GameCard>[].obs;
   final _showLabel = false.obs;
   final _labelMessage = ''.obs;
   bool _isAnimation = false;
-
-  GameCard get cardSelect => _cardSelect.value;
-
   final cardsPosition = [
     Alignment.topLeft,
     Alignment.topRight,
@@ -26,7 +24,9 @@ class GameController extends GetxController {
     Alignment.bottomRight,
   ].obs;
 
-  set cardSelect(GameCard value) {
+  List<GameCard> get cardSelect => _cardSelect;
+
+  set cardSelect(List<GameCard> value) {
     if (_isAnimation) return;
     _cardSelect.value = value;
   }
@@ -49,14 +49,25 @@ class GameController extends GetxController {
     _labelMessage.value = value;
   }
 
+  void onChoice(GameCard card) {
+    if (_isAnimation) return;
+    if (cardSelect.contains(card)) {
+      cardSelect.removeWhere((element) => element == card);
+    } else {
+      if (cardSelect.length >= 3) {
+        cardSelect.removeAt(0);
+      }
+      cardSelect.add(card);
+    }
+  }
+
   Future onCardSelect(GameCard card) async {
     if (_isAnimation) return;
-    if (cardSelect == GameCard.none) {
+    if (cardSelect.isEmpty) {
       Get.rawSnackbar(message: 'Chọn bài kìa');
       return;
     }
     select = [card];
-    print('Select: $cardSelect, result: ${select.first}');
     await Future.delayed(const Duration(milliseconds: 600));
     select = [
       GameCard.spadeAce,
@@ -65,7 +76,7 @@ class GameController extends GetxController {
       GameCard.clubAce,
       GameCard.redKing,
     ];
-    if (card == cardSelect) {
+    if (cardSelect.contains(card)) {
       labelMessage = 'WIN';
     } else {
       labelMessage = 'LOSE';
@@ -76,13 +87,13 @@ class GameController extends GetxController {
 
   Future reset() async {
     await Future.delayed(const Duration(seconds: 3));
-    cardSelect = GameCard.none;
+    cardSelect = [];
     _isAnimation = true;
     select = [];
     showLabel = false;
     await Future.delayed(const Duration(milliseconds: 1000));
-    for (var i = 0; i <= 50; i++) {
-      await Future.delayed(const Duration(milliseconds: 10));
+    for (var i = 0; i <= 20; i++) {
+      await Future.delayed(const Duration(milliseconds: 20));
       cardsPosition.shuffle();
     }
     _isAnimation = false;
