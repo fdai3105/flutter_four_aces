@@ -133,14 +133,14 @@ class GamePage extends GetView<GameController> {
 
   Widget _buildLabel() {
     return AnimatedPositioned(
-      top: 40,
+      top: controller.showLabel ? 40 : -100,
       left: 0,
       right: 0,
       height: 80,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 500),
       child: AnimatedOpacity(
         opacity: controller.showLabel ? 1 : 0,
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 250),
         child: Container(
           margin: const EdgeInsets.all(10),
           decoration: const BoxDecoration(
