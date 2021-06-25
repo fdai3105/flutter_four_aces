@@ -1,28 +1,47 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 
+import '../../data/models/history.dart';
+import '../../data/providers/hive_provider.dart';
+
+part 'game_controller.g.dart';
+
+@HiveType(typeId: 2)
 enum GameCard {
+  @HiveField(0)
   spadeAce,
+  @HiveField(1)
   heartAce,
+  @HiveField(2)
   diamondAce,
+  @HiveField(3)
   clubAce,
+  @HiveField(4)
   redKing,
+  @HiveField(5)
   none,
 }
 
 class GameController extends GetxController {
-  // final _cardSelect = GameCard.none.obs;
+  final HiveProvider hiveProvider;
+
+  GameController({required this.hiveProvider});
+
   final _cardSelect = <GameCard>[].obs;
   final _select = <GameCard>[].obs;
   final _showLabel = false.obs;
   final _labelMessage = ''.obs;
   bool _isAnimation = false;
+  final _win = 0.obs;
+  final _lose = 0.obs;
   final cardsPosition = [
     Alignment.topLeft,
     Alignment.topRight,
     Alignment.bottomLeft,
     Alignment.bottomRight,
   ].obs;
+  final _history = <History>[].obs;
 
   List<GameCard> get cardSelect => _cardSelect;
 
@@ -49,6 +68,47 @@ class GameController extends GetxController {
     _labelMessage.value = value;
   }
 
+  double get rate {
+    switch (cardSelect.length) {
+      case 1:
+        return 3.84;
+      case 2:
+        return 1.92;
+      case 3:
+        return 1.28;
+      default:
+        return 0;
+    }
+  }
+
+  int get win => _win.value;
+
+  set win(int value) {
+    _win.value = value;
+  }
+
+  int get lose => _lose.value;
+
+  set lose(int value) {
+    _lose.value = value;
+  }
+
+  List<History> get history => _history;
+
+  set history(List<History> value) {
+    _history.value = value;
+  }
+
+  @override
+  void onInit() async {
+    history = await hiveProvider.getHistory();
+    await hiveProvider.getItem()
+      ..listen((event) {
+        history.add(event);
+      });
+    super.onInit();
+  }
+
   void onChoice(GameCard card) {
     if (_isAnimation) return;
     if (cardSelect.contains(card)) {
@@ -68,6 +128,7 @@ class GameController extends GetxController {
       return;
     }
     select = [card];
+    await _saveToHive(card);
     await Future.delayed(const Duration(milliseconds: 600));
     select = [
       GameCard.spadeAce,
@@ -78,8 +139,10 @@ class GameController extends GetxController {
     ];
     if (cardSelect.contains(card)) {
       labelMessage = 'WIN';
+      win++;
     } else {
       labelMessage = 'LOSE';
+      lose++;
     }
     showLabel = true;
     await reset();
@@ -97,5 +160,14 @@ class GameController extends GetxController {
       cardsPosition.shuffle();
     }
     _isAnimation = false;
+  }
+
+  Future _saveToHive(GameCard result) async {
+    final history = History(
+      dateTime: DateTime.now(),
+      choice: cardSelect,
+      result: result,
+    );
+    await hiveProvider.addHistory(history);
   }
 }

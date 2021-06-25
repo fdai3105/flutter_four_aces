@@ -15,20 +15,38 @@ class GamePage extends GetView<GameController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(47, 41, 36, 1),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return DialogHistory(history: controller.history);
+                },
+              );
+            },
+            icon: const Icon(Icons.history),
+          )
+        ],
+      ),
       body: SafeArea(
         child: GetX<GameController>(
           builder: (_) {
             return Stack(
               children: [
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Flexible(
-                      flex: 2,
+                      flex: 3,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
                           vertical: 20,
+                          horizontal: 40,
                         ),
                         child: Stack(
                           fit: StackFit.expand,
@@ -87,6 +105,14 @@ class GamePage extends GetView<GameController> {
                             ),
                           ],
                         ),
+                      ),
+                    ),
+                    Text(
+                      'Win: ${controller.win} / Lose: ${controller.lose}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     _buildBar(),
