@@ -20,4 +20,9 @@ class History extends HiveObject {
     required this.choice,
     required this.result,
   });
+
+  @override
+  String toString() {
+    return 'History{dateTime: $dateTime, choice: $choice, result: $result}';
+  }
 }

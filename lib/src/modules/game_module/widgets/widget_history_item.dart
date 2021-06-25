@@ -3,12 +3,14 @@ part of 'widgets.dart';
 class WidgetHistoryItem extends StatelessWidget {
   final Widget firstColumn;
   final Widget secondColumn;
+  final Widget threeColumn;
   final EdgeInsets? padding;
 
   const WidgetHistoryItem({
     Key? key,
     required this.firstColumn,
     required this.secondColumn,
+    required this.threeColumn,
     this.padding,
   }) : super(key: key);
 
@@ -20,12 +22,21 @@ class WidgetHistoryItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Flexible(
+            flex: 2,
             fit: FlexFit.tight,
             child: firstColumn,
           ),
           Flexible(
+            flex: 2,
             fit: FlexFit.tight,
             child: secondColumn,
+          ),
+          Flexible(
+            fit: FlexFit.tight,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: threeColumn,
+            ),
           ),
         ],
       ),

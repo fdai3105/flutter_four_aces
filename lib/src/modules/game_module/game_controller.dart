@@ -41,7 +41,6 @@ class GameController extends GetxController {
     Alignment.bottomLeft,
     Alignment.bottomRight,
   ].obs;
-  final _history = <History>[].obs;
 
   List<GameCard> get cardSelect => _cardSelect;
 
@@ -68,18 +67,18 @@ class GameController extends GetxController {
     _labelMessage.value = value;
   }
 
-  double get rate {
-    switch (cardSelect.length) {
-      case 1:
-        return 3.84;
-      case 2:
-        return 1.92;
-      case 3:
-        return 1.28;
-      default:
-        return 0;
-    }
-  }
+  // double get rate {
+  //   switch (cardSelect.length) {
+  //     case 1:
+  //       return 3.84;
+  //     case 2:
+  //       return 1.92;
+  //     case 3:
+  //       return 1.28;
+  //     default:
+  //       return 0;
+  //   }
+  // }
 
   int get win => _win.value;
 
@@ -91,22 +90,6 @@ class GameController extends GetxController {
 
   set lose(int value) {
     _lose.value = value;
-  }
-
-  List<History> get history => _history;
-
-  set history(List<History> value) {
-    _history.value = value;
-  }
-
-  @override
-  void onInit() async {
-    history = await hiveProvider.getHistory();
-    await hiveProvider.getItem()
-      ..listen((event) {
-        history.add(event);
-      });
-    super.onInit();
   }
 
   void onChoice(GameCard card) {
@@ -165,7 +148,7 @@ class GameController extends GetxController {
   Future _saveToHive(GameCard result) async {
     final history = History(
       dateTime: DateTime.now(),
-      choice: cardSelect,
+      choice: cardSelect.toList(),
       result: result,
     );
     await hiveProvider.addHistory(history);

@@ -15,107 +15,111 @@ class GamePage extends GetView<GameController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(47, 41, 36, 1),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        shadowColor: Colors.transparent,
-        actions: [
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return DialogHistory(history: controller.history);
-                },
-              );
-            },
-            icon: const Icon(Icons.history),
-          )
-        ],
-      ),
       body: SafeArea(
         child: GetX<GameController>(
           builder: (_) {
             return Stack(
               children: [
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Flexible(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 20,
-                          horizontal: 40,
-                        ),
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            AnimatedAlign(
-                              duration: const Duration(
-                                  milliseconds: _shuffleDuration),
-                              alignment: controller.cardsPosition[0],
-                              child: WidgetCard(
-                                cardType: GameCard.spadeAce,
-                                isSelect: controller.select
-                                    .contains(GameCard.spadeAce),
-                                onTap: (card) {
-                                  controller.onCardSelect(card);
-                                },
+                    AppBar(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      shadowColor: Colors.transparent,
+                      actions: [
+                        IconButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => DialogHistory(),
+                            );
+                          },
+                          icon: const Icon(Icons.history),
+                        )
+                      ],
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Flexible(
+                            flex: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 30,
+                              ),
+                              child: Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  AnimatedAlign(
+                                    duration: const Duration(
+                                        milliseconds: _shuffleDuration),
+                                    alignment: controller.cardsPosition[0],
+                                    child: WidgetCard(
+                                      cardType: GameCard.spadeAce,
+                                      isSelect: controller.select
+                                          .contains(GameCard.spadeAce),
+                                      onTap: (card) {
+                                        controller.onCardSelect(card);
+                                      },
+                                    ),
+                                  ),
+                                  AnimatedAlign(
+                                    duration: const Duration(
+                                        milliseconds: _shuffleDuration),
+                                    alignment: controller.cardsPosition[1],
+                                    child: WidgetCard(
+                                      cardType: GameCard.heartAce,
+                                      isSelect: controller.select
+                                          .contains(GameCard.heartAce),
+                                      onTap: (card) {
+                                        controller.onCardSelect(card);
+                                      },
+                                    ),
+                                  ),
+                                  AnimatedAlign(
+                                    duration: const Duration(
+                                        milliseconds: _shuffleDuration),
+                                    alignment: controller.cardsPosition[2],
+                                    child: WidgetCard(
+                                      cardType: GameCard.diamondAce,
+                                      isSelect: controller.select
+                                          .contains(GameCard.diamondAce),
+                                      onTap: (card) {
+                                        controller.onCardSelect(card);
+                                      },
+                                    ),
+                                  ),
+                                  AnimatedAlign(
+                                    duration: const Duration(
+                                        milliseconds: _shuffleDuration),
+                                    alignment: controller.cardsPosition[3],
+                                    child: WidgetCard(
+                                      cardType: GameCard.clubAce,
+                                      isSelect: controller.select
+                                          .contains(GameCard.clubAce),
+                                      onTap: (card) {
+                                        controller.onCardSelect(card);
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            AnimatedAlign(
-                              duration: const Duration(
-                                  milliseconds: _shuffleDuration),
-                              alignment: controller.cardsPosition[1],
-                              child: WidgetCard(
-                                cardType: GameCard.heartAce,
-                                isSelect: controller.select
-                                    .contains(GameCard.heartAce),
-                                onTap: (card) {
-                                  controller.onCardSelect(card);
-                                },
-                              ),
+                          ),
+                          Text(
+                            'Win: ${controller.win} / Lose: ${controller.lose}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600,
                             ),
-                            AnimatedAlign(
-                              duration: const Duration(
-                                  milliseconds: _shuffleDuration),
-                              alignment: controller.cardsPosition[2],
-                              child: WidgetCard(
-                                cardType: GameCard.diamondAce,
-                                isSelect: controller.select
-                                    .contains(GameCard.diamondAce),
-                                onTap: (card) {
-                                  controller.onCardSelect(card);
-                                },
-                              ),
-                            ),
-                            AnimatedAlign(
-                              duration: const Duration(
-                                  milliseconds: _shuffleDuration),
-                              alignment: controller.cardsPosition[3],
-                              child: WidgetCard(
-                                cardType: GameCard.clubAce,
-                                isSelect: controller.select
-                                    .contains(GameCard.clubAce),
-                                onTap: (card) {
-                                  controller.onCardSelect(card);
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                          _buildBar(),
+                        ],
                       ),
                     ),
-                    Text(
-                      'Win: ${controller.win} / Lose: ${controller.lose}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    _buildBar(),
                   ],
                 ),
                 _buildLabel(),
@@ -129,7 +133,7 @@ class GamePage extends GetView<GameController> {
 
   Widget _buildLabel() {
     return AnimatedPositioned(
-      top: controller.showLabel ? 0 : -100,
+      top: 40,
       left: 0,
       right: 0,
       height: 80,
