@@ -35,12 +35,11 @@ class GameController extends GetxController {
   bool _isAnimation = false;
   final _win = 0.obs;
   final _lose = 0.obs;
-  final cardsPosition = [
-    Alignment.topLeft,
-    Alignment.topRight,
-    Alignment.bottomLeft,
-    Alignment.bottomRight,
-  ].obs;
+
+  final _spadePos = Alignment.topLeft.obs;
+  final _heartPos = Alignment.topRight.obs;
+  final _diamondPos = Alignment.bottomLeft.obs;
+  final _clubPos = Alignment.bottomRight.obs;
 
   List<GameCard> get cardSelect => _cardSelect;
 
@@ -67,19 +66,6 @@ class GameController extends GetxController {
     _labelMessage.value = value;
   }
 
-  // double get rate {
-  //   switch (cardSelect.length) {
-  //     case 1:
-  //       return 3.84;
-  //     case 2:
-  //       return 1.92;
-  //     case 3:
-  //       return 1.28;
-  //     default:
-  //       return 0;
-  //   }
-  // }
-
   int get win => _win.value;
 
   set win(int value) {
@@ -90,6 +76,30 @@ class GameController extends GetxController {
 
   set lose(int value) {
     _lose.value = value;
+  }
+
+  get spadePos => _spadePos.value;
+
+  set spadePos(value) {
+    _spadePos.value = value;
+  }
+
+  get heartPos => _heartPos.value;
+
+  set heartPos(value) {
+    _heartPos.value = value;
+  }
+
+  get diamondPos => _diamondPos.value;
+
+  set diamondPos(value) {
+    _diamondPos.value = value;
+  }
+
+  get clubPos => _clubPos.value;
+
+  set clubPos(value) {
+    _clubPos.value = value;
   }
 
   void onChoice(GameCard card) {
@@ -137,11 +147,11 @@ class GameController extends GetxController {
     _isAnimation = true;
     select = [];
     showLabel = false;
-    await Future.delayed(const Duration(milliseconds: 1000));
-    for (var i = 0; i <= 20; i++) {
-      await Future.delayed(const Duration(milliseconds: 20));
-      cardsPosition.shuffle();
-    }
+    // await Future.delayed(const Duration(milliseconds: 1000));
+    // for (var i = 0; i <= 20; i++) {
+    //   await Future.delayed(const Duration(milliseconds: 20));
+    //   cardsPosition.shuffle();
+    // }
     _isAnimation = false;
   }
 
@@ -152,5 +162,22 @@ class GameController extends GetxController {
       result: result,
     );
     await hiveProvider.addHistory(history);
+  }
+
+  Future autoRandom() async {
+    final cardsPosition = [
+      Alignment.topLeft,
+      Alignment.topRight,
+      Alignment.bottomLeft,
+      Alignment.bottomRight,
+    ];
+    for (var i = 0; i <= 20; i++) {
+      await Future.delayed(const Duration(milliseconds: 20));
+      cardsPosition.shuffle();
+      spadePos = cardsPosition[0];
+      heartPos = cardsPosition[1];
+      diamondPos = cardsPosition[2];
+      clubPos = cardsPosition[3];
+    }
   }
 }

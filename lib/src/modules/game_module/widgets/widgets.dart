@@ -10,5 +10,6 @@ import '../../../utils/utils.dart';
 import '../game_controller.dart';
 
 part 'dialog_history.dart';
+part 'widget_button.dart';
 part 'widget_card.dart';
 part 'widget_history_item.dart';

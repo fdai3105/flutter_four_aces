@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'game_controller.dart';
@@ -16,32 +15,37 @@ class GamePage extends GetView<GameController> {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(47, 41, 36, 1),
       body: SafeArea(
-        child: GetX<GameController>(
-          builder: (_) {
-            return Stack(
-              children: [
-                Column(
-                  children: [
-                    AppBar(
-                      backgroundColor: Colors.transparent,
-                      elevation: 0,
-                      shadowColor: Colors.transparent,
-                      actions: [
-                        IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => DialogHistory(),
-                            );
-                          },
-                          icon: const Icon(Icons.history),
-                        )
-                      ],
-                    ),
-                    Expanded(
-                      child: Column(
+        child: Column(
+          children: [
+            AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              shadowColor: Colors.transparent,
+              actions: [
+                IconButton(
+                  onPressed: () => controller.autoRandom(),
+                  icon: const Icon(Icons.shuffle),
+                ),
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => DialogHistory(),
+                    );
+                  },
+                  icon: const Icon(Icons.history),
+                ),
+              ],
+            ),
+            Expanded(
+              child: GetX<GameController>(
+                builder: (_) {
+                  return Stack(
+                    children: [
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
+                          // _buildCards(),
                           Flexible(
                             flex: 3,
                             child: Padding(
@@ -52,58 +56,10 @@ class GamePage extends GetView<GameController> {
                               child: Stack(
                                 fit: StackFit.expand,
                                 children: [
-                                  AnimatedAlign(
-                                    duration: const Duration(
-                                        milliseconds: _shuffleDuration),
-                                    alignment: controller.cardsPosition[0],
-                                    child: WidgetCard(
-                                      cardType: GameCard.spadeAce,
-                                      isSelect: controller.select
-                                          .contains(GameCard.spadeAce),
-                                      onTap: (card) {
-                                        controller.onCardSelect(card);
-                                      },
-                                    ),
-                                  ),
-                                  AnimatedAlign(
-                                    duration: const Duration(
-                                        milliseconds: _shuffleDuration),
-                                    alignment: controller.cardsPosition[1],
-                                    child: WidgetCard(
-                                      cardType: GameCard.heartAce,
-                                      isSelect: controller.select
-                                          .contains(GameCard.heartAce),
-                                      onTap: (card) {
-                                        controller.onCardSelect(card);
-                                      },
-                                    ),
-                                  ),
-                                  AnimatedAlign(
-                                    duration: const Duration(
-                                        milliseconds: _shuffleDuration),
-                                    alignment: controller.cardsPosition[2],
-                                    child: WidgetCard(
-                                      cardType: GameCard.diamondAce,
-                                      isSelect: controller.select
-                                          .contains(GameCard.diamondAce),
-                                      onTap: (card) {
-                                        controller.onCardSelect(card);
-                                      },
-                                    ),
-                                  ),
-                                  AnimatedAlign(
-                                    duration: const Duration(
-                                        milliseconds: _shuffleDuration),
-                                    alignment: controller.cardsPosition[3],
-                                    child: WidgetCard(
-                                      cardType: GameCard.clubAce,
-                                      isSelect: controller.select
-                                          .contains(GameCard.clubAce),
-                                      onTap: (card) {
-                                        controller.onCardSelect(card);
-                                      },
-                                    ),
-                                  ),
+                                  _build1(),
+                                  _build2(),
+                                  _build3(),
+                                  _build4(),
                                 ],
                               ),
                             ),
@@ -119,15 +75,244 @@ class GamePage extends GetView<GameController> {
                           _buildBar(),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-                _buildLabel(),
-              ],
-            );
-          },
+                      _buildLabel(),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildDragTarget(Alignment currentAlign, int key) {
+    return Container(
+      height: 220,
+      width: 100,
+      child: DragTarget(
+        key: ValueKey(key),
+        builder: (context, data, rejectData) {
+          return SizedBox();
+          if (data.isEmpty) return const Text(':(');
+          switch (data.first as GameCard) {
+            case GameCard.spadeAce:
+              return WidgetCard(
+                cardType: GameCard.spadeAce,
+                isSelect: /*controller.select.contains(GameCard.spadeAce)*/ true,
+                onTap: (card) {
+                  controller.onCardSelect(card);
+                },
+              );
+            case GameCard.heartAce:
+              return WidgetCard(
+                cardType: GameCard.heartAce,
+                isSelect: /*controller.select.contains(GameCard.heartAce)*/ true,
+                onTap: (card) {
+                  controller.onCardSelect(card);
+                },
+              );
+            case GameCard.diamondAce:
+              return WidgetCard(
+                cardType: GameCard.diamondAce,
+                isSelect: /*controller.select.contains(GameCard.diamondAce)*/ true,
+                onTap: (card) {
+                  controller.onCardSelect(card);
+                },
+              );
+            case GameCard.clubAce:
+              return WidgetCard(
+                cardType: GameCard.clubAce,
+                isSelect: /*controller.select.contains(GameCard.clubAce)*/ true,
+                onTap: (card) {
+                  controller.onCardSelect(card);
+                },
+              );
+            case GameCard.redKing:
+              return const Text(':(');
+            case GameCard.none:
+              return const Text(':(');
+          }
+        },
+        onWillAccept: (data) {
+          if (data == GameCard.spadeAce) {
+            if (key == 2) {
+              controller.heartPos = controller.spadePos;
+            } else if (key == 3) {
+              controller.diamondPos = controller.spadePos;
+            } else if (key == 4) {
+              controller.clubPos = controller.spadePos;
+            }
+            controller.spadePos = currentAlign;
+            return true;
+          } else if (data == GameCard.heartAce) {
+            if (key == 1) {
+              controller.spadePos = controller.heartPos;
+            } else if (key == 3) {
+              controller.diamondPos = controller.heartPos;
+            } else if (key == 4) {
+              controller.clubPos = controller.heartPos;
+            }
+            controller.heartPos = currentAlign;
+            return true;
+          } else if (data == GameCard.diamondAce) {
+            if (key == 1) {
+              controller.spadePos = controller.diamondPos;
+            } else if (key == 2) {
+              controller.heartPos = controller.diamondPos;
+            } else if (key == 4) {
+              controller.clubPos = controller.diamondPos;
+            }
+            controller.diamondPos = currentAlign;
+            return true;
+          } else if (data == GameCard.clubAce) {
+            if (key == 1) {
+              controller.spadePos = controller.clubPos;
+            } else if (key == 2) {
+              controller.heartPos = controller.clubPos;
+            } else if (key == 3) {
+              controller.diamondPos = controller.clubPos;
+            }
+            controller.clubPos = currentAlign;
+            return true;
+          } else {
+            return false;
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _build1() {
+    return Stack(
+      children: [
+        AnimatedAlign(
+          duration: const Duration(milliseconds: _shuffleDuration),
+          alignment: controller.spadePos,
+          child: Draggable(
+            data: GameCard.spadeAce,
+            childWhenDragging: Container(),
+            feedback: WidgetCard(
+              cardType: GameCard.spadeAce,
+              isSelect: /*controller.select.contains(GameCard.spadeAce)*/ true,
+              onTap: (card) {
+                controller.onCardSelect(card);
+              },
+            ),
+            child: WidgetCard(
+              cardType: GameCard.spadeAce,
+              isSelect: /*controller.select.contains(GameCard.spadeAce)*/ true,
+              onTap: (card) {
+                controller.onCardSelect(card);
+              },
+            ),
+          ),
+        ),
+        Align(
+          alignment: controller.spadePos,
+          child: _buildDragTarget(controller.spadePos, 1),
+        ),
+      ],
+    );
+  }
+
+  Widget _build2() {
+    return Stack(
+      children: [
+        AnimatedAlign(
+          duration: const Duration(milliseconds: _shuffleDuration),
+          alignment: controller.heartPos,
+          child: Draggable(
+            data: GameCard.heartAce,
+            feedback: WidgetCard(
+              cardType: GameCard.heartAce,
+              isSelect: /*controller.select.contains(GameCard.heartAce)*/ true,
+              onTap: (card) {
+                controller.onCardSelect(card);
+              },
+            ),
+            childWhenDragging: Container(),
+            child: WidgetCard(
+              cardType: GameCard.heartAce,
+              isSelect: /*controller.select.contains(GameCard.heartAce)*/ true,
+              onTap: (card) {
+                controller.onCardSelect(card);
+              },
+            ),
+          ),
+        ),
+        Align(
+          alignment: controller.heartPos,
+          child: _buildDragTarget(controller.heartPos, 2),
+        ),
+      ],
+    );
+  }
+
+  Widget _build3() {
+    return Stack(
+      children: [
+        AnimatedAlign(
+          duration: const Duration(milliseconds: _shuffleDuration),
+          alignment: controller.diamondPos,
+          child: Draggable(
+            data: GameCard.diamondAce,
+            feedback: WidgetCard(
+              cardType: GameCard.diamondAce,
+              isSelect: /*controller.select.contains(GameCard.diamondAce)*/ true,
+              onTap: (card) {
+                controller.onCardSelect(card);
+              },
+            ),
+            childWhenDragging: Container(),
+            child: WidgetCard(
+              cardType: GameCard.diamondAce,
+              isSelect: /*controller.select.contains(GameCard.diamondAce)*/ true,
+              onTap: (card) {
+                controller.onCardSelect(card);
+              },
+            ),
+          ),
+        ),
+        Align(
+          alignment: controller.diamondPos,
+          child: _buildDragTarget(controller.diamondPos, 3),
+        ),
+      ],
+    );
+  }
+
+  Widget _build4() {
+    return Stack(
+      children: [
+        AnimatedAlign(
+          duration: const Duration(milliseconds: _shuffleDuration),
+          alignment: controller.clubPos,
+          child: Draggable(
+            data: GameCard.clubAce,
+            childWhenDragging: Container(),
+            feedback: WidgetCard(
+              cardType: GameCard.clubAce,
+              isSelect: /*controller.select.contains(GameCard.clubAce)*/ true,
+              onTap: (card) {
+                controller.onCardSelect(card);
+              },
+            ),
+            child: WidgetCard(
+              cardType: GameCard.clubAce,
+              isSelect: /*controller.select.contains(GameCard.clubAce)*/ true,
+              onTap: (card) {
+                controller.onCardSelect(card);
+              },
+            ),
+          ),
+        ),
+        Align(
+          alignment: controller.clubPos,
+          child: _buildDragTarget(controller.clubPos, 4),
+        ),
+      ],
     );
   }
 
@@ -190,41 +375,6 @@ class GamePage extends GetView<GameController> {
             assets: 'assets/images/button4.svg',
           ),
         ],
-      ),
-    );
-  }
-}
-
-class WidgetButton extends StatelessWidget {
-  final Function() onTap;
-  final String assets;
-  final bool isSelect;
-
-  const WidgetButton({
-    Key? key,
-    required this.onTap,
-    required this.assets,
-    required this.isSelect,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          border: isSelect
-              ? Border.all(
-                  color: const Color.fromRGBO(180, 146, 74, 1),
-                  width: 2,
-                )
-              : Border.all(color: Colors.transparent, width: 2),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: SvgPicture.asset(
-          assets,
-          height: 60,
-        ),
       ),
     );
   }
