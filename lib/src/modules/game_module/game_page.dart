@@ -14,126 +14,97 @@ class GamePage extends GetView<GameController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(47, 41, 36, 1),
-      body: SafeArea(
-        child: Column(
-          children: [
-            AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              shadowColor: Colors.transparent,
-              actions: [
-                IconButton(
-                  onPressed: () => controller.autoRandom(),
-                  icon: const Icon(Icons.shuffle),
+      body: GetX<GameController>(
+        builder: (_) {
+          return SafeArea(
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    _buildAppBar(),
+                    Expanded(
+                      child: GetX<GameController>(
+                        builder: (_) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Flexible(
+                                flex: 3,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 30,
+                                  ),
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      _build1(),
+                                      _build2(),
+                                      _build3(),
+                                      _build4(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                'Win: ${controller.win} / Lose: ${controller.lose}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              _buildBar(),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => DialogHistory(),
-                    );
-                  },
-                  icon: const Icon(Icons.history),
-                ),
+                _buildLabel(),
               ],
             ),
-            Expanded(
-              child: GetX<GameController>(
-                builder: (_) {
-                  return Stack(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          // _buildCards(),
-                          Flexible(
-                            flex: 3,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 10,
-                                horizontal: 30,
-                              ),
-                              child: Stack(
-                                fit: StackFit.expand,
-                                children: [
-                                  _build1(),
-                                  _build2(),
-                                  _build3(),
-                                  _build4(),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Text(
-                            'Win: ${controller.win} / Lose: ${controller.lose}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          _buildBar(),
-                        ],
-                      ),
-                      _buildLabel(),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      shadowColor: Colors.transparent,
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.person),
+        ),
+        IconButton(
+          onPressed: () => controller.autoRandom(),
+          icon: const Icon(Icons.shuffle),
+        ),
+        IconButton(
+          onPressed: () {
+            showDialog(
+              context: Get.context!,
+              builder: (context) => DialogHistory(),
+            );
+          },
+          icon: const Icon(Icons.history),
+        ),
+      ],
     );
   }
 
   Widget _buildDragTarget(Alignment currentAlign, int key) {
     return Container(
       height: 220,
-      width: 100,
+      width: 155,
       child: DragTarget(
-        key: ValueKey(key),
         builder: (context, data, rejectData) {
-          return SizedBox();
-          if (data.isEmpty) return const Text(':(');
-          switch (data.first as GameCard) {
-            case GameCard.spadeAce:
-              return WidgetCard(
-                cardType: GameCard.spadeAce,
-                isSelect: /*controller.select.contains(GameCard.spadeAce)*/ true,
-                onTap: (card) {
-                  controller.onCardSelect(card);
-                },
-              );
-            case GameCard.heartAce:
-              return WidgetCard(
-                cardType: GameCard.heartAce,
-                isSelect: /*controller.select.contains(GameCard.heartAce)*/ true,
-                onTap: (card) {
-                  controller.onCardSelect(card);
-                },
-              );
-            case GameCard.diamondAce:
-              return WidgetCard(
-                cardType: GameCard.diamondAce,
-                isSelect: /*controller.select.contains(GameCard.diamondAce)*/ true,
-                onTap: (card) {
-                  controller.onCardSelect(card);
-                },
-              );
-            case GameCard.clubAce:
-              return WidgetCard(
-                cardType: GameCard.clubAce,
-                isSelect: /*controller.select.contains(GameCard.clubAce)*/ true,
-                onTap: (card) {
-                  controller.onCardSelect(card);
-                },
-              );
-            case GameCard.redKing:
-              return const Text(':(');
-            case GameCard.none:
-              return const Text(':(');
-          }
+          return const SizedBox();
         },
         onWillAccept: (data) {
           if (data == GameCard.spadeAce) {
@@ -195,14 +166,14 @@ class GamePage extends GetView<GameController> {
             childWhenDragging: Container(),
             feedback: WidgetCard(
               cardType: GameCard.spadeAce,
-              isSelect: /*controller.select.contains(GameCard.spadeAce)*/ true,
+              isSelect: controller.select.contains(GameCard.spadeAce),
               onTap: (card) {
                 controller.onCardSelect(card);
               },
             ),
             child: WidgetCard(
               cardType: GameCard.spadeAce,
-              isSelect: /*controller.select.contains(GameCard.spadeAce)*/ true,
+              isSelect: controller.select.contains(GameCard.spadeAce),
               onTap: (card) {
                 controller.onCardSelect(card);
               },
@@ -227,7 +198,7 @@ class GamePage extends GetView<GameController> {
             data: GameCard.heartAce,
             feedback: WidgetCard(
               cardType: GameCard.heartAce,
-              isSelect: /*controller.select.contains(GameCard.heartAce)*/ true,
+              isSelect: controller.select.contains(GameCard.heartAce),
               onTap: (card) {
                 controller.onCardSelect(card);
               },
@@ -235,7 +206,7 @@ class GamePage extends GetView<GameController> {
             childWhenDragging: Container(),
             child: WidgetCard(
               cardType: GameCard.heartAce,
-              isSelect: /*controller.select.contains(GameCard.heartAce)*/ true,
+              isSelect: controller.select.contains(GameCard.heartAce),
               onTap: (card) {
                 controller.onCardSelect(card);
               },
@@ -260,7 +231,7 @@ class GamePage extends GetView<GameController> {
             data: GameCard.diamondAce,
             feedback: WidgetCard(
               cardType: GameCard.diamondAce,
-              isSelect: /*controller.select.contains(GameCard.diamondAce)*/ true,
+              isSelect: controller.select.contains(GameCard.diamondAce),
               onTap: (card) {
                 controller.onCardSelect(card);
               },
@@ -268,7 +239,7 @@ class GamePage extends GetView<GameController> {
             childWhenDragging: Container(),
             child: WidgetCard(
               cardType: GameCard.diamondAce,
-              isSelect: /*controller.select.contains(GameCard.diamondAce)*/ true,
+              isSelect: controller.select.contains(GameCard.diamondAce),
               onTap: (card) {
                 controller.onCardSelect(card);
               },
@@ -294,14 +265,14 @@ class GamePage extends GetView<GameController> {
             childWhenDragging: Container(),
             feedback: WidgetCard(
               cardType: GameCard.clubAce,
-              isSelect: /*controller.select.contains(GameCard.clubAce)*/ true,
+              isSelect: controller.select.contains(GameCard.clubAce),
               onTap: (card) {
                 controller.onCardSelect(card);
               },
             ),
             child: WidgetCard(
               cardType: GameCard.clubAce,
-              isSelect: /*controller.select.contains(GameCard.clubAce)*/ true,
+              isSelect: controller.select.contains(GameCard.clubAce),
               onTap: (card) {
                 controller.onCardSelect(card);
               },

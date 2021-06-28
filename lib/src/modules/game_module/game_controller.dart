@@ -147,21 +147,9 @@ class GameController extends GetxController {
     _isAnimation = true;
     select = [];
     showLabel = false;
-    // await Future.delayed(const Duration(milliseconds: 1000));
-    // for (var i = 0; i <= 20; i++) {
-    //   await Future.delayed(const Duration(milliseconds: 20));
-    //   cardsPosition.shuffle();
-    // }
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await autoRandom();
     _isAnimation = false;
-  }
-
-  Future _saveToHive(GameCard result) async {
-    final history = History(
-      dateTime: DateTime.now(),
-      choice: cardSelect.toList(),
-      result: result,
-    );
-    await hiveProvider.addHistory(history);
   }
 
   Future autoRandom() async {
@@ -171,7 +159,7 @@ class GameController extends GetxController {
       Alignment.bottomLeft,
       Alignment.bottomRight,
     ];
-    for (var i = 0; i <= 20; i++) {
+    for (var i = 0; i <= 30; i++) {
       await Future.delayed(const Duration(milliseconds: 20));
       cardsPosition.shuffle();
       spadePos = cardsPosition[0];
@@ -179,5 +167,14 @@ class GameController extends GetxController {
       diamondPos = cardsPosition[2];
       clubPos = cardsPosition[3];
     }
+  }
+
+  Future _saveToHive(GameCard result) async {
+    final history = History(
+      dateTime: DateTime.now(),
+      choice: cardSelect.toList(),
+      result: result,
+    );
+    await hiveProvider.addHistory(history);
   }
 }

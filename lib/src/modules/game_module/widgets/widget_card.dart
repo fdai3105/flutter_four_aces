@@ -61,8 +61,8 @@ class WidgetCard extends StatelessWidget {
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 600),
         layoutBuilder: (widget, list) => Stack(children: [widget!, ...list]),
-        switchInCurve: Curves.easeOut,
-        switchOutCurve: Curves.easeOut.flipped,
+        switchInCurve: Curves.easeInBack,
+        switchOutCurve: Curves.easeInBack.flipped,
         transitionBuilder: (widget, animation) {
           animation.addListener(() {
             _animationCompleted = animation.isCompleted;

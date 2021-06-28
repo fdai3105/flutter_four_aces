@@ -58,6 +58,7 @@ class DialogHistory extends StatelessWidget {
                     );
                   }
                   return ListView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     itemCount: box.values.toList().length,
                     itemBuilder: (context, i) {
                       final item = box.values.toList()[i];
