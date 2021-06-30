@@ -57,11 +57,12 @@ class DialogHistory extends StatelessWidget {
                       ),
                     );
                   }
+                  final list = box.values.toList().reversed;
                   return ListView.builder(
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    itemCount: box.values.toList().length,
+                    itemCount: list.length,
                     itemBuilder: (context, i) {
-                      final item = box.values.toList()[i];
+                      final item = list.toList()[i];
                       return WidgetHistoryItem(
                         padding: const EdgeInsets.symmetric(
                           vertical: 2,

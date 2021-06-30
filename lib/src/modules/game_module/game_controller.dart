@@ -44,7 +44,6 @@ class GameController extends GetxController {
   List<GameCard> get cardSelect => _cardSelect;
 
   set cardSelect(List<GameCard> value) {
-    if (isAnimation) return;
     _cardSelect.value = value;
   }
 
@@ -78,28 +77,47 @@ class GameController extends GetxController {
     _lose.value = value;
   }
 
-  get spadePos => _spadePos.value;
+  Alignment get spadePos => _spadePos.value;
 
-  set spadePos(value) {
+  set spadePos(Alignment value) {
     _spadePos.value = value;
   }
 
-  get heartPos => _heartPos.value;
+  Alignment get heartPos => _heartPos.value;
 
-  set heartPos(value) {
+  set heartPos(Alignment value) {
     _heartPos.value = value;
   }
 
-  get diamondPos => _diamondPos.value;
+  Alignment get diamondPos => _diamondPos.value;
 
-  set diamondPos(value) {
+  set diamondPos(Alignment value) {
     _diamondPos.value = value;
   }
 
-  get clubPos => _clubPos.value;
+  Alignment get clubPos => _clubPos.value;
 
-  set clubPos(value) {
+  set clubPos(Alignment value) {
     _clubPos.value = value;
+  }
+
+  final _history = <History>[].obs;
+
+  List<History> get history => _history;
+
+  set history(List<History> value) {
+    _history.value = value;
+  }
+
+  @override
+  void onInit() {
+    history = hiveProvider.getHistory();
+    Hive.box<History>('history').watch().listen((event) {
+      if (event.value != null) {
+        history.add(event.value);
+      }
+    });
+    super.onInit();
   }
 
   void onChoice(GameCard card) {
@@ -175,6 +193,6 @@ class GameController extends GetxController {
       choice: cardSelect.toList(),
       result: result,
     );
-    await hiveProvider.addHistory(history);
+    hiveProvider.addHistory(history);
   }
 }

@@ -3,17 +3,20 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../models/history.dart';
 
 class HiveProvider {
-  HiveProvider() {
-    Hive.openBox<History>('history');
+  static Future initialize() async {
+    await Hive.openBox<History>('history');
   }
 
-  Future<List<History>> getHistory() async {
+  List<History> getHistory() {
     final box = Hive.box<History>('history');
     return box.values.toList();
   }
 
-  Future addHistory(History history) async {
-    final box = await Hive.openBox<History>('history');
-    await box.add(history);
+  void addHistory(History history) {
+    final box = Hive.box<History>('history');
+    if (box.values.length >= 10) {
+      box.deleteAt(0);
+    }
+    box.add(history);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_four_aces/src/data/providers/hive_provider.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -16,6 +17,7 @@ Future main() async {
   ]);
   await Hive.initFlutter();
   Hive..registerAdapter(HistoryAdapter())..registerAdapter(GameCardAdapter());
+  await HiveProvider.initialize();
   runApp(MyApp());
 }
 
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'Four Aces',
       debugShowCheckedModeBanner: false,
       getPages: AppPages.pages,
       initialBinding: GameBinding(),

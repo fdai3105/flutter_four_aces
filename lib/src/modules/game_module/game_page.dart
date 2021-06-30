@@ -14,10 +14,10 @@ class GamePage extends GetView<GameController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(47, 41, 36, 1),
-      body: GetX<GameController>(
-        builder: (_) {
-          return SafeArea(
-            child: Stack(
+      body: SafeArea(
+        child: GetX<GameController>(
+          builder: (_) {
+            return Stack(
               children: [
                 Column(
                   children: [
@@ -64,9 +64,9 @@ class GamePage extends GetView<GameController> {
                 ),
                 _buildLabel(),
               ],
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
