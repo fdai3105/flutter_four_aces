@@ -71,8 +71,8 @@ class WidgetCard extends StatelessWidget {
           return AnimatedBuilder(
             animation: rotateAnim,
             builder: (context, child) {
-              final isUnder = ValueKey(!isSelect) != child!.key;
               var tilt = ((animation.value - 0.5).abs() - 0.5) * 0.003;
+              final isUnder = ValueKey(!isSelect) != child!.key;
               tilt *= isUnder ? -1.0 : 1.0;
               final value =
                   isUnder ? min(rotateAnim.value, pi / 2) : rotateAnim.value;

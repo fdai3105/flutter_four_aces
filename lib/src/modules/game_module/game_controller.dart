@@ -32,7 +32,7 @@ class GameController extends GetxController {
   final _select = <GameCard>[].obs;
   final _showLabel = false.obs;
   final _labelMessage = ''.obs;
-  bool _isAnimation = false;
+  bool isAnimation = false;
   final _win = 0.obs;
   final _lose = 0.obs;
 
@@ -44,7 +44,7 @@ class GameController extends GetxController {
   List<GameCard> get cardSelect => _cardSelect;
 
   set cardSelect(List<GameCard> value) {
-    if (_isAnimation) return;
+    if (isAnimation) return;
     _cardSelect.value = value;
   }
 
@@ -103,7 +103,7 @@ class GameController extends GetxController {
   }
 
   void onChoice(GameCard card) {
-    if (_isAnimation) return;
+    if (isAnimation) return;
     if (cardSelect.contains(card)) {
       cardSelect.removeWhere((element) => element == card);
     } else {
@@ -115,11 +115,12 @@ class GameController extends GetxController {
   }
 
   Future onCardSelect(GameCard card) async {
-    if (_isAnimation) return;
+    if (isAnimation) return;
     if (cardSelect.isEmpty) {
       Get.rawSnackbar(message: 'Chọn bài kìa');
       return;
     }
+    isAnimation = true;
     select = [card];
     await _saveToHive(card);
     await Future.delayed(const Duration(milliseconds: 600));
@@ -139,17 +140,16 @@ class GameController extends GetxController {
     }
     showLabel = true;
     await reset();
+    isAnimation = false;
   }
 
   Future reset() async {
     await Future.delayed(const Duration(seconds: 3));
     cardSelect = [];
-    _isAnimation = true;
     select = [];
     showLabel = false;
     await Future.delayed(const Duration(milliseconds: 1000));
     await autoRandom();
-    _isAnimation = false;
   }
 
   Future autoRandom() async {

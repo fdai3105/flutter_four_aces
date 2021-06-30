@@ -164,6 +164,7 @@ class GamePage extends GetView<GameController> {
           child: Draggable(
             data: GameCard.spadeAce,
             childWhenDragging: Container(),
+            maxSimultaneousDrags: controller.isAnimation ? 0 : null,
             feedback: WidgetCard(
               cardType: GameCard.spadeAce,
               isSelect: controller.select.contains(GameCard.spadeAce),
@@ -196,6 +197,8 @@ class GamePage extends GetView<GameController> {
           alignment: controller.heartPos,
           child: Draggable(
             data: GameCard.heartAce,
+            maxSimultaneousDrags: controller.isAnimation ? 0 : null,
+            childWhenDragging: Container(),
             feedback: WidgetCard(
               cardType: GameCard.heartAce,
               isSelect: controller.select.contains(GameCard.heartAce),
@@ -203,7 +206,6 @@ class GamePage extends GetView<GameController> {
                 controller.onCardSelect(card);
               },
             ),
-            childWhenDragging: Container(),
             child: WidgetCard(
               cardType: GameCard.heartAce,
               isSelect: controller.select.contains(GameCard.heartAce),
@@ -229,6 +231,8 @@ class GamePage extends GetView<GameController> {
           alignment: controller.diamondPos,
           child: Draggable(
             data: GameCard.diamondAce,
+            maxSimultaneousDrags: controller.isAnimation ? 0 : null,
+            childWhenDragging: Container(),
             feedback: WidgetCard(
               cardType: GameCard.diamondAce,
               isSelect: controller.select.contains(GameCard.diamondAce),
@@ -236,7 +240,6 @@ class GamePage extends GetView<GameController> {
                 controller.onCardSelect(card);
               },
             ),
-            childWhenDragging: Container(),
             child: WidgetCard(
               cardType: GameCard.diamondAce,
               isSelect: controller.select.contains(GameCard.diamondAce),
@@ -262,6 +265,7 @@ class GamePage extends GetView<GameController> {
           alignment: controller.clubPos,
           child: Draggable(
             data: GameCard.clubAce,
+            maxSimultaneousDrags: controller.isAnimation ? 0 : null,
             childWhenDragging: Container(),
             feedback: WidgetCard(
               cardType: GameCard.clubAce,
